@@ -1,10 +1,4 @@
-import Header from '@/components/Header'
-import Image from 'next/image'
-import Banner from './components/ActiveLink/Banner'
-import GroupContainer from '@/components/GroupContainer'
-import MatchContainer from '@/components/MatchContainer'
-import Footer from '@/components/Footer'
-import axios from 'axios'
+'use client'
 
 const apiTeams = 'https://api.api-futebol.com.br/v1/campeonatos/14/tabela';
 const apiMtches = 'https://api.api-futebol.com.br/v1/campeonatos/14/partidas';
@@ -35,19 +29,19 @@ const getMatches = async () => {
 } 
 
 
-export default async function Home() {
+export default function Modal({ isOpen, setIsOpen, children }){
 
-  const teams = await getTeams();
-  const matches = await getMatches();
-  
 
-  return (
-    <>
-      <Header/>
-      <Banner/>
-        <GroupContainer teams={teams}/>
-        <MatchContainer matches={matches}/>
-      <Footer/>
-    </>
-  )
+    const teams = getTeams();
+
+    if(!isOpen) return null;
+
+    return (
+        <div className=" flex justify-center w-128 h-200 top-0 left-0 bg-black-rgba fixed">
+            <div className="bg-slate-50 p-8 rounded-xl max-w-75 h-128 relative mt-14">
+                <button type="button" onClick={() => setIsOpen(false)} className=" flex w-3 h-3 cursor-pointer bg-transparent border-none text-black absolute top-3 right-20" >CLOSE</button>
+                {children}
+            </div>
+        </div>
+    )
 }
