@@ -1,5 +1,13 @@
 'use client'
 
+import { ReactNode } from "react";
+
+interface ModalProps{
+  isOpen: boolean,
+  setIsOpen: (isOpen:boolean) => void,
+  children: string
+}
+
 const apiTeams = 'https://api.api-futebol.com.br/v1/campeonatos/14/tabela';
 const apiMtches = 'https://api.api-futebol.com.br/v1/campeonatos/14/partidas';
 const suaApiKey = 'test_bf82ed0b9d59f2a3395535761dad07';
@@ -29,7 +37,7 @@ const getMatches = async () => {
 } 
 
 
-export default function Modal({ isOpen, setIsOpen, children }){
+export default function Modal({ isOpen, setIsOpen, children }:ModalProps){
 
 
     const teams = getTeams();

@@ -4,18 +4,37 @@ import { useState, useEffect } from 'react'
 import Modal from '../Modal';
 
 interface DataGroupType {
-    [x: number]:{nome: string, escudo: string}[]
+    [x: number]:{nome: string, escudo: string, time_id:number }[]
 }
 
-export default function GroupContainer({teams}){
+interface MainDataModal{
+    nome: string, escudo: string, time_id:number
+}
+
+interface TeamsStatistics{
+    time:{nome_popular:string, escudo: string, sigla: string, time_id:number},
+    aproveitamento: number,
+    derrotas: number,
+    empates: number,
+    gols_contra : number,
+    gols_pro: number,
+    jogos: number,
+    pontos: number,
+    posicao: number,
+    saldo_gols:number,
+    vitorias:number
+}
+
+export default function GroupContainer({ teams }:TeamsStatistics[]){
     const [grouplist, setGroupList] = useState<DataGroupType>({} as DataGroupType);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [modalData, setModalData] = useState()
+    const [modalData, setModalData] = useState<string>()
 
 
     useEffect(() =>{
       getData()
-        
+    
+      console.log(teams, '???????')
   },[teams])
   
   
@@ -45,8 +64,8 @@ export default function GroupContainer({teams}){
 
     return(
         <>
-            <Modal isOpen={modalIsOpen} setIsOpen={setModalIsOpen} teams={teams}>
-                {teams.map((team) =>(
+            <Modal isOpen={modalIsOpen} setIsOpen={setModalIsOpen}>
+                {teams.map((team:TeamsStatistics) =>(
                     team.time.nome_popular === modalData ? 
                     <div className='flex flex-col gap-4'>
                         <img src={team.time.escudo} className='w-52' />
@@ -60,7 +79,7 @@ export default function GroupContainer({teams}){
                         <p>Gols Pro: {team.gols_pro}</p>
                     </div> 
                     : 
-                    console.log(team)
+                    null
                     ))}
             </Modal>
             <div className='flex gap-x-28 justify-center m-20' >
@@ -68,9 +87,9 @@ export default function GroupContainer({teams}){
                     return(
                         <div className="flex flex-col bg-slate-300 border shadow-xl w-1/5 h-96 p-7 justify-center" >
                     <div>
-                        {value[1].map(({nome, escudo, time_id}) =>{
+                        {value[1].map(({nome, escudo, time_id}:MainDataModal) =>{
                             return(
-                            <div key={nome} id={time_id}
+                            <div key={nome} id={time_id.toString()}
                                 className='flex gap-2 mb-5 items-center'>
                                 <img src={escudo}  alt='escudo do time' className='w-9'/>
                                 <p onClick={((e) => {
